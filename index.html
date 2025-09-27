@@ -178,23 +178,20 @@
 		}
 
 		// Evento principal: status do jogador
-		cef.on("game:data:playerStats", (hp, maxHp, arm, maxArm, wanted, weapon, ammo, max_ammo, money, speed) => {
+		// O listener DEVE ter 4 argumentos, correspondendo aos 4 valores inteiros enviados pelo PAWN
+		cef.on("game:data:playerStats", (hp, maxHp, arm, maxArm) => {
+			
 			// 1. VIDA (Círculo e Texto)
 			const healthPercent = Math.round((hp / maxHp) * 100);
-			
-			// Atualiza o círculo de vida
 			updateCircle("hud-vida", healthPercent);
-			// Atualiza o texto de porcentagem de vida
 			setText("health-text", `${healthPercent}%`); 
 
 			// 2. COLETE (Círculo e Texto)
 			const armorPercent = maxArm > 0 ? Math.round((arm / maxArm) * 100) : 0;
-			
-			// Atualiza o círculo de colete
 			updateCircle("hud-colete", armorPercent);
-			// Atualiza o texto de porcentagem de colete
 			setText("armor-text", `${armorPercent}%`);
 
+			// ...
 		});
 
 
