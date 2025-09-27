@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>HUD Moderno - Ultra Reduzido</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            height: 100vh;
+            font-family: "Poppins", Arial, sans-serif;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        /* Logo central superior */
+        .logo {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .logo img {
+            max-width: 160px;
+        }
+
+        /* HUD moderno (círculos) */
+        .hud {
+            position: absolute;
+            top: 20px;
+            right: 15px; /* Aproxima da borda direita */
+            display: flex;
+            gap: 10px; /* Reduz ainda mais o espaçamento */
+        }
+
+        .hud-item {
+            width: 50px; /* NOVO: Largura do círculo principal */
+            height: 50px; /* NOVO: Altura do círculo principal */
+            position: relative;
+        }
+
+        .circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--color) calc(var(--value) * 1%),
+                rgba(255, 255, 255, 0.1) 0
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .circle::before {
+            content: "";
+            position: absolute;
+            width: 40px; /* NOVO: Círculo interno ajustado */
+            height: 40px; /* NOVO: Círculo interno ajustado */
+            background: #101010;
+            border-radius: 50%;
+        }
+
+        .circle-content {
+            position: absolute;
+            text-align: center;
+            font-size: 9px; /* NOVO: Fonte menor */
+            z-index: 2;
+        }
+
+        .circle-content img {
+            width: 15px; /* NOVO: Ícone menor */
+            height: 15px; /* NOVO: Ícone menor */
+            display: block;
+            margin: 0 auto 1px auto; /* Ajusta a margem do ícone */
+        }
+
+        /* Infos inferior */
+        .info {
+            position: absolute;
+            bottom: 15px; /* Aproxima da borda inferior */
+            right: 15px; /* Aproxima da borda direita */
+            padding: 6px 10px; /* Reduz o preenchimento */
+            border-radius: 6px; /* Ajusta o arredondamento */
+            font-size: 13px; /* NOVO: Fonte menor */
+            text-align: center;
+            line-height: 1.2; /* Ajusta a altura da linha */
+        }
+
+        .info span {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <img src="assets/img/logo.png" alt="Logo">
+    </div>
+
+    <div class="hud">
+        <div class="hud-item" id="hud-vida">
+            <div class="circle" style="--value:66; --color:#ff4d4d;">
+                <div class="circle-content">
+                    <img src="assets/img/vida.png" alt="Vida">
+                    <span>66%</span>
+                </div>
+            </div>
+        </div>
+        <div class="hud-item" id="hud-colete">
+            <div class="circle" style="--value:100; --color:#00bfff;">
+                <div class="circle-content">
+                    <img src="assets/img/colete.png" alt="Colete">
+                    <span>100%</span>
+                </div>
+            </div>
+        </div>
+        <div class="hud-item">
+            <div class="circle" style="--value:100; --color:#ffd633;">
+                <div class="circle-content">
+                    <img src="assets/img/fome.png" alt="Fome">
+                    <span>100%</span>
+                </div>
+            </div>
+        </div>
+        <div class="hud-item">
+            <div class="circle" style="--value:100; --color:#1aff66;">
+                <div class="circle-content">
+                    <img src="assets/img/sede.png" alt="Sede">
+                    <span>100%</span>
+                </div>
+            </div>
+        </div>
+        <div class="hud-item">
+            <div class="circle" style="--value:100; --color:#ff66ff;">
+                <div class="circle-content">
+                    <img src="assets/img/sono.png" alt="Sono">
+                    <span>100%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="info">
+		<span id="hora"></span>
+        <span>Versão: 0.1.1</span>
+    </div>
+
+    <script>
+        function atualizarHora() {
+            const agora = new Date();
+            // Formato HH:MM:SS
+            const hora = String(agora.getHours()).padStart(2, '0');
+            const minuto = String(agora.getMinutes()).padStart(2, '0');
+            const segundo = String(agora.getSeconds()).padStart(2, '0');
+            document.getElementById('hora').textContent = `${hora}:${minuto}:${segundo}`;
+        }
+        // Atualiza a cada segundo
+        setInterval(atualizarHora, 1000);
+        // Garante que a hora apareça imediatamente
+        atualizarHora();
+    </script>
+	
+	
+	<script>
+	
+		// Função para atualizar o valor do círculo (HUD)
+		function updateCircle(elementId, percentValue) {
+			const item = document.getElementById(elementId);
+			if (item) {
+				// Encontra a div.circle dentro do item
+				const circle = item.querySelector('.circle');
+				if (circle) {
+					// Define a variável CSS --value para animar o círculo
+					circle.style.setProperty('--value', percentValue);
+				}
+			}
+		}
+
+		// Evento principal: status do jogador
+		cef.on("game:data:playerStats", (hp, maxHp, arm, maxArm, wanted, weapon, ammo, max_ammo, money, speed) => {
+			// 1. VIDA (Círculo e Texto)
+			const healthPercent = Math.round((hp / maxHp) * 100);
+			
+			// Atualiza o círculo de vida
+			updateCircle("hud-vida", healthPercent);
+			// Atualiza o texto de porcentagem de vida
+			setText("health-text", `${healthPercent}%`); 
+
+			// 2. COLETE (Círculo e Texto)
+			const armorPercent = maxArm > 0 ? Math.round((arm / maxArm) * 100) : 0;
+			
+			// Atualiza o círculo de colete
+			updateCircle("hud-colete", armorPercent);
+			// Atualiza o texto de porcentagem de colete
+			setText("armor-text", `${armorPercent}%`);
+
+		});
+
+
+		// Funções utilitárias (mantenha estas)
+		function setText(id, value) {
+			const el = document.getElementById(id);
+			if (el) el.textContent = value;
+		}
+
+		function formatNumber(x) {
+			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+		}
+	</script>
+</body>
+</html>
