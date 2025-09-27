@@ -100,10 +100,10 @@
 
     <div class="hud">
         <div class="hud-item" id="hud-vida">
-            <div class="circle" style="--value:66; --color:#ff4d4d;">
+            <div class="circle" style="--value:100; --color:#ff4d4d;">
                 <div class="circle-content">
                     <img src="assets/img/vida.png" alt="Vida">
-                    <span id="vidap">66%</span>
+                    <span id="vidap">100%</span>
                 </div>
             </div>
         </div>
@@ -145,63 +145,54 @@
 		<span id="hora"></span>
         <span>Versão: 0.1.1</span>
     </div>
+<script>
+        // --- FUNÇÕES UTILITÁRIAS PARA CÍRCULOS ---
 
-    <script>
-        function atualizarHora() {
-            const agora = new Date();
-            // Formato HH:MM:SS
-            const hora = String(agora.getHours()).padStart(2, '0');
-            const minuto = String(agora.getMinutes()).padStart(2, '0');
-            const segundo = String(agora.getSeconds()).padStart(2, '0');
-            document.getElementById('hora').textContent = `${hora}:${minuto}:${segundo}`;
-        }
-        // Atualiza a cada segundo
-        setInterval(atualizarHora, 1000);
-        // Garante que a hora apareça imediatamente
-        atualizarHora();
-    </script>
-	
- <script>
-
-        // --- FUNÇÕES UTILITÁRIAS ---
-
-        // Atualiza a variável CSS --value no círculo (para o preenchimento)
+        // 1. Atualiza a variável CSS --value (o preenchimento do círculo)
         function updateCircle(containerId, percentValue) {
             const item = document.getElementById(containerId);
             if (item) {
                 const circle = item.querySelector('.circle');
                 if (circle) {
-                    // Garante que o valor está entre 0 e 100
                     const value = Math.max(0, Math.min(100, percentValue));
                     circle.style.setProperty('--value', value);
                 }
             }
         }
 
-        // Atualiza o texto dentro do span
+        // 2. Atualiza o texto de porcentagem no centro
         function setText(textId, value) {
             const el = document.getElementById(textId);
             if (el) el.textContent = value;
         }
 
+        // Relógio (mantido)
+        function atualizarHora() {
+            const agora = new Date();
+            const hora = String(agora.getHours()).padStart(2, '0');
+            const minuto = String(agora.getMinutes()).padStart(2, '0');
+            const segundo = String(agora.getSeconds()).padStart(2, '0');
+            document.getElementById('hora').textContent = `${hora}:${minuto}:${segundo}`;
+        }
+        setInterval(atualizarHora, 1000);
+        atualizarHora();
 
-        // Ouve o evento do PAWN: "pwd:allitem"
-        // Este listener espera 2 argumentos (Colete e Vida), 
-        // mas é melhor nomeá-los corretamente para evitar confusão com o PAWN.
-        // Ordem do PAWN: cef_emit_event(playerid, "pwd:allitem", CEFINT(vida), CEFINT(colete));
+        // --- LISTENER PRINCIPAL PARA SEU PAWN ---
+
+        // Ouve o evento "pwd:allitem" que recebe 2 argumentos: [Vida, Colete]
         cef.on("pwd:allitem", (vidaAtual, coleteAtual) => {
             
-            // VIDA (1º argumento do PAWN)
+            // 1. VIDA (Primeiro argumento do seu PAWN)
             const healthPercent = Math.round(vidaAtual);
-            updateCircle("hud-vida", healthPercent);
-            setText("vidap", `${healthPercent}%`); 
+            updateCircle("hud-vida", healthPercent); // Atualiza o preenchimento
+            setText("vidap", `${healthPercent}%`); // Atualiza o texto
 
-            // COLETE (2º argumento do PAWN)
+            // 2. COLETE (Segundo argumento do seu PAWN)
             const armorPercent = Math.round(coleteAtual);
-            updateCircle("hud-colete", armorPercent);
-            setText("coletep", `${armorPercent}%`);
+            updateCircle("hud-colete", armorPercent); // Atualiza o preenchimento
+            setText("coletep", `${armorPercent}%`); // Atualiza o texto
         });
-        
+
     </script>
 </body>
 </html>
