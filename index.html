@@ -162,48 +162,40 @@
     </script>
 	
 	
-	<script>
-	
-		// Função para atualizar o valor do círculo (HUD)
-		function updateCircle(elementId, percentValue) {
-			const item = document.getElementById(elementId);
-			if (item) {
-				// Encontra a div.circle dentro do item
-				const circle = item.querySelector('.circle');
-				if (circle) {
-					// Define a variável CSS --value para animar o círculo
-					circle.style.setProperty('--value', percentValue);
-				}
-			}
-		}
+	 <script>
 
-		// Evento principal: status do jogador
-		// O listener DEVE ter 4 argumentos, correspondendo aos 4 valores inteiros enviados pelo PAWN
-		cef.on("game:data:playerStats", (hp, maxHp, arm, maxArm) => {
-			
-			// 1. VIDA (Círculo e Texto)
-			const healthPercent = Math.round((hp / maxHp) * 100);
-			updateCircle("hud-vida", healthPercent);
-			setText("health-text", `${healthPercent}%`); 
+        // Função para atualizar o valor da variável CSS do círculo
+        function updateCircle(elementId, percentValue) {
+            const item = document.getElementById(elementId);
+            if (item) {
+                const circle = item.querySelector('.circle');
+                if (circle) {
+                    circle.style.setProperty('--value', percentValue);
+                }
+            }
+        }
 
-			// 2. COLETE (Círculo e Texto)
-			const armorPercent = maxArm > 0 ? Math.round((arm / maxArm) * 100) : 0;
-			updateCircle("hud-colete", armorPercent);
-			setText("armor-text", `${armorPercent}%`);
+        // Função para atualizar o texto do span
+        function setText(id, value) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = value;
+        }
+        
+        // Ouve o NOVO evento do PAWN: "pwd:allitem"
+        // Recebe apenas dois argumentos: vida atual (0-100) e colete atual (0-100)
+        cef.on("pwd:allitem", (vidaAtual, coleteAtual) => {
+            
+            // VIDA: Como o PAWN envia de 0 a 100, é só usar o valor diretamente
+            const healthPercent = Math.round(vidaAtual);
+            updateCircle("hud-vida", healthPercent);
+            setText("health-text", `${healthPercent}%`); 
 
-			// ...
-		});
-
-
-		// Funções utilitárias (mantenha estas)
-		function setText(id, value) {
-			const el = document.getElementById(id);
-			if (el) el.textContent = value;
-		}
-
-		function formatNumber(x) {
-			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-		}
-	</script>
+            // COLETE: Também de 0 a 100
+            const armorPercent = Math.round(coleteAtual);
+            updateCircle("hud-colete", armorPercent);
+            setText("armor-text", `${armorPercent}%`);
+        });
+		
+    </script>
 </body>
 </html>
