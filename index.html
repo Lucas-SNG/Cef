@@ -161,10 +161,10 @@
         }
 
         // 2. Atualiza o texto de porcentagem no centro
-        function setText(textId, value) {
-            const el = document.getElementById(textId);
-            if (el) el.textContent = value;
-        }
+	   function setText(textId, value) {
+			const el = document.getElementById(textId);
+			if (el) el.textContent = value; // ALTERAÇÃO AQUI: Removemos o operador de string/concatenação
+		}
 
         // Relógio (mantido)
         function atualizarHora() {
@@ -180,18 +180,20 @@
         // --- LISTENER PRINCIPAL PARA SEU PAWN ---
 
         // Ouve o evento "pwd:allitem" que recebe 2 argumentos: [Vida, Colete]
-        cef.on("pwd:allitem", (vidaAtual, coleteAtual) => {
-            
-            // 1. VIDA (Primeiro argumento do seu PAWN)
-            const healthPercent = Math.round(vidaAtual);
-            updateCircle("hud-vida", healthPercent); // Atualiza o preenchimento
-            setText("vidap", `${healthPercent}%`); // Atualiza o texto
+		cef.on("pwd:allitem", (vidaAtual, coleteAtual) => {
+			
+			// 1. VIDA (Primeiro argumento do seu PAWN)
+			const healthValue = Math.round(vidaAtual); // Mudei o nome da variável para ser mais claro
+			updateCircle("hud-vida", healthValue); 
+			// CHAMADA: Agora envia apenas o número inteiro para o setText
+			setText("vidap", healthValue); 
 
-            // 2. COLETE (Segundo argumento do seu PAWN)
-            const armorPercent = Math.round(coleteAtual);
-            updateCircle("hud-colete", armorPercent); // Atualiza o preenchimento
-            setText("coletep", `${armorPercent}%`); // Atualiza o texto
-        });
+			// 2. COLETE (Segundo argumento do seu PAWN)
+			const armorValue = Math.round(coleteAtual); // Mudei o nome da variável para ser mais claro
+			updateCircle("hud-colete", armorValue);
+			// CHAMADA: Agora envia apenas o número inteiro para o setText
+			setText("coletep", armorValue);
+		});
 
     </script>
 </body>
