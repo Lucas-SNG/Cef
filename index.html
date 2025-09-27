@@ -173,24 +173,25 @@
 
 
 
-		// A função setText agora SÓ deve colocar o número
 		function setText(textId, value) {
 			const el = document.getElementById(textId);
-			if (el) el.textContent = value; // Correto: SÓ coloca o número (ex: 100)
+			if (el) el.textContent = value; 
 		}
 
-		// O listener CEF chama a função corretamente:
+		// Ouve o evento "pwd:allitem" que recebe 2 argumentos: [Vida, Colete]
 		cef.on("pwd:allitem", (vidaAtual, coleteAtual) => {
 			
-			// 1. VIDA
-			const healthValue = Math.round(vidaAtual);
+			// 1. VIDA (1º argumento do seu PAWN)
+			// Usamos o valor diretamente, pois ele já é INT
+			const healthValue = vidaAtual; 
 			updateCircle("hud-vida", healthValue); 
-			setText("vidap", healthValue); // Correto: Manda SÓ o número
+			setText("vidap", healthValue); 
 
-			// 2. COLETE
-			const armorValue = Math.round(coleteAtual);
+			// 2. COLETE (2º argumento do seu PAWN)
+			// Usamos o valor diretamente, pois ele já é INT
+			const armorValue = coleteAtual; 
 			updateCircle("hud-colete", armorValue);
-			setText("coletep", armorValue); // Correto: Manda SÓ o número
+			setText("coletep", armorValue);
 		});
 
     </script>
