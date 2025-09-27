@@ -165,6 +165,7 @@
 	 <script>
 
         // Função para atualizar o valor da variável CSS do círculo
+        // Atualiza a variável CSS --value no círculo
         function updateCircle(elementId, percentValue) {
             const item = document.getElementById(elementId);
             if (item) {
@@ -175,27 +176,27 @@
             }
         }
 
-        // Função para atualizar o texto do span
+        // Atualiza o texto dentro do span
         function setText(id, value) {
             const el = document.getElementById(id);
             if (el) el.textContent = value;
         }
-        
-        // Ouve o NOVO evento do PAWN: "pwd:allitem"
-        // Recebe apenas dois argumentos: vida atual (0-100) e colete atual (0-100)
+
+        // Ouve o evento do PAWN: "pwd:allitem"
+        // Recebe dois argumentos: vida atual (0-100) e colete atual (0-100)
         cef.on("pwd:allitem", (vidaAtual, coleteAtual) => {
             
-            // VIDA: Como o PAWN envia de 0 a 100, é só usar o valor diretamente
+            // VIDA
             const healthPercent = Math.round(vidaAtual);
             updateCircle("hud-vida", healthPercent);
             setText("health-text", `${healthPercent}%`); 
 
-            // COLETE: Também de 0 a 100
+            // COLETE
             const armorPercent = Math.round(coleteAtual);
             updateCircle("hud-colete", armorPercent);
             setText("armor-text", `${armorPercent}%`);
         });
-		
+        
     </script>
 </body>
 </html>
