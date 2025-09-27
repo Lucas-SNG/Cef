@@ -161,21 +161,24 @@
         atualizarHora();
     </script>
 	
-    <script>
-        // --- FUNÇÕES UTILITÁRIAS (Definidas no topo) ---
+ <script>
 
-        // 1. Atualiza a variável CSS --value no círculo (para o preenchimento)
+        // --- FUNÇÕES UTILITÁRIAS ---
+
+        // Atualiza a variável CSS --value no círculo (para o preenchimento)
         function updateCircle(containerId, percentValue) {
             const item = document.getElementById(containerId);
             if (item) {
                 const circle = item.querySelector('.circle');
                 if (circle) {
-                    circle.style.setProperty('--value', percentValue);
+                    // Garante que o valor está entre 0 e 100
+                    const value = Math.max(0, Math.min(100, percentValue));
+                    circle.style.setProperty('--value', value);
                 }
             }
         }
 
-        // 2. Atualiza o texto dentro do span (para a porcentagem no centro)
+        // Atualiza o texto dentro do span
         function setText(textId, value) {
             const el = document.getElementById(textId);
             if (el) el.textContent = value;
@@ -183,27 +186,21 @@
 
 
         // Ouve o evento do PAWN: "pwd:allitem"
-        // Recebe dois argumentos: vida atual (0-100) e colete atual (0-100)
+        // Este listener espera 2 argumentos (Colete e Vida), 
+        // mas é melhor nomeá-los corretamente para evitar confusão com o PAWN.
+        // Ordem do PAWN: cef_emit_event(playerid, "pwd:allitem", CEFINT(vida), CEFINT(colete));
         cef.on("pwd:allitem", (vidaAtual, coleteAtual) => {
             
-            // VALORES: O PAWN envia os valores arredondados (0 a 100)
-            const healthPct = Math.round(vidaAtual);
-            const armorPct = Math.round(coleteAtual);
+            // VIDA (1º argumento do PAWN)
+            const healthPercent = Math.round(vidaAtual);
+            updateCircle("hud-vida", healthPercent);
+            setText("vidap", `${healthPercent}%`); 
 
-            // 1. VIDA
-            // Atualiza o preenchimento do círculo de Vida (ID: hud-vida)
-            updateCircle("hud-vida", healthPct);
-            // Atualiza o texto de porcentagem de Vida (ID: valor-vida-pct)
-            setText("vidap", `${healthPct}%`); 
-
-            // 2. COLETE
-            // Atualiza o preenchimento do círculo de Colete (ID: hud-colete)
-            updateCircle("hud-colete", armorPct);
-            // Atualiza o texto de porcentagem de Colete (ID: valor-colete-pct)
-            setText("coletep", `${armorPct}%`);
+            // COLETE (2º argumento do PAWN)
+            const armorPercent = Math.round(coleteAtual);
+            updateCircle("hud-colete", armorPercent);
+            setText("coletep", `${armorPercent}%`);
         });
-
-        cef.emit("game:data:pollPlayerStats", true, 50);
         
     </script>
 </body>
