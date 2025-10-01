@@ -188,12 +188,24 @@
         </a>
 
 
-        <div class="center-circle">
+        <div class="center-circle" onclick="FecharMenu()">
 			ALT
         </div>
     </div>
 	
 
-
+<script>
+    function FecharMenu() {
+        if (typeof cef !== "undefined" && cef.emit) {
+            
+            // Dispara o evento que o Pawn está ouvindo
+            cef.emit("FECHAR_CEF_SIMPLES"); 
+        }
+        
+        // Esconde a interface imediatamente para o usuário ver que o clique funcionou.
+        document.body.style.display = "none";
+    }
+</script>
 </body>
 </html>
+
