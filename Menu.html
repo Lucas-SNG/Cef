@@ -196,16 +196,21 @@
 
 <script>
     function FecharMenu() {
+
         if (typeof cef !== "undefined" && cef.emit) {
             
-            // Dispara o evento que o Pawn está ouvindo
-            cef.emit("FECHAR_CEF_SIMPLES"); 
+            // Aqui enviamos o argumento '1'
+            cef.emit("Fechar:Menu", 1); 
+
+        } else {
+            console.error("ERRO CEF: 'cef.emit' não está disponível.");
         }
         
-        // Esconde a interface imediatamente para o usuário ver que o clique funcionou.
+        // Esconde imediatamente a div para feedback visual
         document.body.style.display = "none";
     }
 </script>
 </body>
 </html>
+
 
