@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Circular V3 (8 Itens)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Variáveis CSS para fácil ajuste */
+        :root {
+            --neon-color: #FF0000;
+            --menu-size: 380px;  /* Aumentamos o tamanho do container */
+            --item-size: 80px;
+            --radius: 190px;     /* Novo raio: metade do menu-size */
+            --glow-shadow: 0 0 10px var(--neon-color), 0 0 20px var(--neon-color);
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: transparent; /* Fundo mais escuro */
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        /* Container Principal do Menu (Onde os itens orbitam) */
+        .circular-menu {
+            position: relative;
+            width: var(--menu-size);
+            height: var(--menu-size);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            /* Fundo sutil do círculo principal (simulando a interface do GTA) 
+            background-color: rgba(255, 255, 255, 0.05);*/
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            transition: all 0.5s ease-in-out;
+        }
+
+        /* Itens do Menu (Glassmorphism + Neon) */
+        .menu-item {
+            position: absolute;
+            width: var(--item-size);
+            height: var(--item-size);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            
+            /* Glassmorphism */
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Movimento mais fluido */
+        }
+
+        /* Efeito de Hover (Brilho Neon) */
+        .menu-item:hover {
+            color: var(--neon-color);
+            background: rgba(0, 0, 0, 0.5);
+            /* Brilho Neon */
+            box-shadow: var(--glow-shadow), 0 0 10px rgba(0, 0, 0, 0.8) inset;
+            transform: scale(1.1) translateZ(15px); /* Efeito 3D mais pronunciado */
+            border-color: var(--glow-shadow);
+        }
+
+        .menu-item i {
+            font-size: 32px;
+            margin-bottom: 5px;
+          /*  text-shadow: 0 0 5px var(--neon-color);*/
+        }
+        
+        /* Círculo Central (Foco da Interação) */
+        .center-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+
+            border: 3px solid var(--neon-color);
+            box-shadow: var(--glow-shadow);
+            color: #FFF;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        /* * POSICIONAMENTO CIRCULAR PARA 8 ITENS (45 graus de diferença)
+         * Usamos a técnica de rotate/translate/rotate-negativo para posicionar sem girar o texto.
+         * Começamos a 22.5 graus para centralizar os itens vertical e horizontalmente.
+         */
+
+        .menu-item:nth-child(1) { /* Cima-Direita */
+            transform: rotate(22.5deg) translate(var(--radius)) rotate(-22.5deg);
+        }
+
+        .menu-item:nth-child(2) { /* Direita */
+            transform: rotate(67.5deg) translate(var(--radius)) rotate(-67.5deg);
+        }
+        
+        .menu-item:nth-child(3) { /* Baixo-Direita */
+            transform: rotate(112.5deg) translate(var(--radius)) rotate(-112.5deg);
+        }
+
+        .menu-item:nth-child(4) { /* Baixo */
+            transform: rotate(157.5deg) translate(var(--radius)) rotate(-157.5deg);
+        }
+
+        .menu-item:nth-child(5) { /* Baixo-Esquerda */
+            transform: rotate(202.5deg) translate(var(--radius)) rotate(-202.5deg);
+        }
+
+        .menu-item:nth-child(6) { /* Esquerda */
+            transform: rotate(247.5deg) translate(var(--radius)) rotate(-247.5deg);
+        }
+
+        .menu-item:nth-child(7) { /* Cima-Esquerda */
+            transform: rotate(292.5deg) translate(var(--radius)) rotate(-292.5deg);
+        }
+
+        .menu-item:nth-child(8) { /* Cima */
+            transform: rotate(337.5deg) translate(var(--radius)) rotate(-337.5deg);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="circular-menu">
+        <a href="#" class="menu-item">
+            <i class="fas fa-wallet"></i>
+            Carteira
+        </a>
+
+        <a href="#" class="menu-item">
+            <i class="fas fa-id-card"></i>
+            RG
+        </a>
+
+        <a href="#" class="menu-item">
+            <i class="fas fa-exclamation-triangle"></i>
+            SOS
+        </a>
+
+        <a href="#" class="menu-item">
+            <i class="fas fa-mobile-alt"></i>
+            Celular
+        </a>
+
+        <a href="#" class="menu-item">
+            <i class="fas fa-backpack"></i>
+            Mochila
+        </a>
+        
+        <a href="#" class="menu-item">
+            <i class="fas fa-car"></i>
+            Veículo
+        </a>
+
+        <a href="#" class="menu-item">
+            <i class="fas fa-map-marker-alt"></i>
+            GPS
+        </a>
+        
+        <a href="#" class="menu-item">
+            <i class="fas fa-cog"></i>
+            Opções
+        </a>
+
+
+        <div class="center-circle" onclick="FecharMenu()">
+			FECHAR
+        </div>
+    </div>
+	
+	<script>
+		function FecharMenu() {
+
+			cef_browser_call('FechamentoMenu');
+   
+		}
+	</script>
+
+</body>
+</html>
