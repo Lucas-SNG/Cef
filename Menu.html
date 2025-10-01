@@ -196,21 +196,11 @@
 
 <script>
     function FecharMenu() {
-
-        if (typeof cef !== "undefined" && cef.emit) {
-            
-            // Aqui enviamos o argumento '1'
-            cef.emit("Fechar:Menu", 1); 
-
-        } else {
-            console.error("ERRO CEF: 'cef.emit' não está disponível.");
-        }
-        
-        // Esconde imediatamente a div para feedback visual
-        document.body.style.display = "none";
+            cef.emit("Fechar:Menu"); 
     }
 </script>
 </body>
 </html>
+
 
 
