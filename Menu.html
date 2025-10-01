@@ -194,11 +194,16 @@
 	
 	<script>
 		function FecharMenu() {
-
-			cef_browser_call('FechamentoMenu');
-   
-		}
+        // O nome da função deve ser EXATAMENTE igual ao nome no Pawn.
+        // O plugin CEF passará automaticamente o 'playerid' como primeiro argumento.
+        if (typeof cef_browser_call === 'function') {
+            cef_browser_call('FechamentoMenu');
+            console.log("Sinal de fechamento enviado para a função Pawn 'FechamentoMenu'.");
+        } else {
+            console.error("Erro: 'cef_browser_call' não está definido. Verifique a integração do seu CEF.");
+        }
 	</script>
 
 </body>
+
 </html>
