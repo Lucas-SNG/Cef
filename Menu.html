@@ -196,11 +196,15 @@
 
 <script>
     function FecharMenu() {
-		document.body.style.display = "none";
+        // Envia o sinal "fechar:simples"
+        if (typeof cef !== "undefined" && cef.emit) {
+             cef.emit("fechar:simples");
+        }
     }
 </script>
 </body>
 </html>
+
 
 
 
