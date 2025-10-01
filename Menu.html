@@ -42,6 +42,7 @@
             border-radius: 50%;
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+			background-color: #0000007d;
             transition: all 0.5s ease-in-out;
         }
 
@@ -187,22 +188,12 @@
         </a>
 
 
-        <div class="center-circle" onclick="FecharMenu()">
-			FECHAR
+        <div class="center-circle">
+			ALT
         </div>
     </div>
 	
-	<script>
-		function FecharMenu() {
-        	 if (typeof cef !== "undefined" && cef.emit) {
-                cef.emit("Fechar:Menu"); // tipo 1 = desistiu / tipo 2 = tempo acabou
-            }
 
-        }
-	</script>
 
 </body>
-
 </html>
-
-
